@@ -11,7 +11,16 @@ class MovieDbService
         query: query
       }
     })
-    JSON.parse(response.body, symbolize_names: true)
+    found_tv_shows = JSON.parse(response.body, symbolize_names: true)[:results]
+    watchlist_ids = get_tv_show_watchlist.map {|tv_show| tv_show[:id] }
+    favorite_ids = get_favorite_tv_shows.map {|tv_show| tv_show[:id] }
+
+    found_tv_shows.each do |tv_show|
+      tv_show[:watchlist] = watchlist_ids.include?(tv_show[:id])
+      tv_show[:favorite] = favorite_ids.include?(tv_show[:id])
+    end
+
+    found_tv_shows
   end
 
   def get_tv_show_watchlist
@@ -22,7 +31,7 @@ class MovieDbService
         session_id: Rails.application.config.themoviedb_session_id
       }
     })
-    JSON.parse(response.body, symbolize_names: true)
+    JSON.parse(response.body, symbolize_names: true)[:results]
   end
 
   def get_favorite_tv_shows
@@ -33,7 +42,7 @@ class MovieDbService
         session_id: Rails.application.config.themoviedb_session_id
       }
     })
-    JSON.parse(response.body, symbolize_names: true)
+    JSON.parse(response.body, symbolize_names: true)[:results]
   end
 
   def add_tv_show_to_watchlist(tv_show_id)

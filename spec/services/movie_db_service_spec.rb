@@ -47,12 +47,32 @@ describe MovieDbService do
       }
     ).and_return(raw_response)
 
-    response = service.search_tv_show('hello')
+    expect(RestClient).to receive(:get).with(
+      'https://api.themoviedb.org/3/account/-1/watchlist/tv',
+      {
+        params: {
+          api_key: Rails.application.config.themoviedb_api_key,
+          session_id: Rails.application.config.themoviedb_session_id
+        }
+      }
+    ).and_return(raw_response)
 
-    expect(response[:page]).to eq(1)
-    expect(response[:total_pages]).to eq(1)
-    expect(response[:total_results]).to eq(1)
-    expect(response[:results].size).to eq(1)
+    expect(RestClient).to receive(:get).with(
+      'https://api.themoviedb.org/3/account/-1/favorite/tv',
+      {
+        params: {
+          api_key: Rails.application.config.themoviedb_api_key,
+          session_id: Rails.application.config.themoviedb_session_id
+        }
+      }
+    ).and_return(raw_response)
+
+    results = service.search_tv_show('hello')
+
+    expect(results.size).to eq(1)
+    expect(results[0][:id]).to eq(1418)
+    expect(results[0][:watchlist]).to be_truthy
+    expect(results[0][:favorite]).to be_truthy
   end
 
   it 'get tv show watchlist' do
@@ -66,12 +86,10 @@ describe MovieDbService do
       }
     ).and_return(raw_response)
 
-    response = service.get_tv_show_watchlist
+    results = service.get_tv_show_watchlist
 
-    expect(response[:page]).to eq(1)
-    expect(response[:total_pages]).to eq(1)
-    expect(response[:total_results]).to eq(1)
-    expect(response[:results].size).to eq(1)
+    expect(results.size).to eq(1)
+    expect(results[0][:id]).to eq(1418)
   end
 
   it 'get favorite tv show' do
@@ -82,15 +100,13 @@ describe MovieDbService do
           api_key: Rails.application.config.themoviedb_api_key,
           session_id: Rails.application.config.themoviedb_session_id
         }
-      }
+       }
     ).and_return(raw_response)
 
-    response = service.get_favorite_tv_shows
+    results = service.get_favorite_tv_shows
 
-    expect(response[:page]).to eq(1)
-    expect(response[:total_pages]).to eq(1)
-    expect(response[:total_results]).to eq(1)
-    expect(response[:results].size).to eq(1)
+    expect(results.size).to eq(1)
+    expect(results[0][:id]).to eq(1418)
   end
 
   it 'add a tv show to watchlist' do

@@ -1,24 +1,19 @@
-# README
+# Expense Check backend APIs
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Backend APIs implementation for Expense Check sample project 
 
-Things you may want to cover:
+## How to run
 
-* Ruby version
+### Install ruby
+See [Ruby Version Manager - RVM](https://rvm.io/rvm/install) to install ruby version 2.5.1
 
-* System dependencies
+### Install gems
+`gem install bundler`
 
-* Configuration
+`bundle install`
 
-* Database creation
+### Unit tests
+`bundle exec rake rspec`
 
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+### Start rails server
+`rails server`
