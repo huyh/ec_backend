@@ -4,6 +4,7 @@ class MovieDbService
   API_BASE_URL = 'https://api.themoviedb.org/3'
 
   def search_tv_show(query)
+    return [] unless query.present?
     url = "#{API_BASE_URL}/search/tv"
     response = RestClient.get(url, {
       params: {
@@ -11,16 +12,7 @@ class MovieDbService
         query: query
       }
     })
-    found_tv_shows = JSON.parse(response.body, symbolize_names: true)[:results]
-    watchlist_ids = get_tv_show_watchlist.map {|tv_show| tv_show[:id] }
-    favorite_ids = get_favorite_tv_shows.map {|tv_show| tv_show[:id] }
-
-    found_tv_shows.each do |tv_show|
-      tv_show[:watchlist] = watchlist_ids.include?(tv_show[:id])
-      tv_show[:favorite] = favorite_ids.include?(tv_show[:id])
-    end
-
-    found_tv_shows
+    JSON.parse(response.body, symbolize_names: true)[:results]
   end
 
   def get_tv_show_watchlist

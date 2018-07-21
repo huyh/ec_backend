@@ -47,32 +47,10 @@ describe MovieDbService do
       }
     ).and_return(raw_response)
 
-    expect(RestClient).to receive(:get).with(
-      'https://api.themoviedb.org/3/account/-1/watchlist/tv',
-      {
-        params: {
-          api_key: Rails.application.config.themoviedb_api_key,
-          session_id: Rails.application.config.themoviedb_session_id
-        }
-      }
-    ).and_return(raw_response)
-
-    expect(RestClient).to receive(:get).with(
-      'https://api.themoviedb.org/3/account/-1/favorite/tv',
-      {
-        params: {
-          api_key: Rails.application.config.themoviedb_api_key,
-          session_id: Rails.application.config.themoviedb_session_id
-        }
-      }
-    ).and_return(raw_response)
-
     results = service.search_tv_show('hello')
 
     expect(results.size).to eq(1)
     expect(results[0][:id]).to eq(1418)
-    expect(results[0][:watchlist]).to be_truthy
-    expect(results[0][:favorite]).to be_truthy
   end
 
   it 'get tv show watchlist' do
