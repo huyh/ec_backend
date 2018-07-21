@@ -34,5 +34,6 @@ module EcBackend
 
     # themoviedb api key
     config.themoviedb_api_key = 'c93d80607200d97f147998401cb86183'
+    config.themoviedb_session_id = '4dcf57d905ceaf6499e19e97bb3076b71982179e'
   end
 end
